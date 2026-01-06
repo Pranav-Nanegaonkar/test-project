@@ -17,17 +17,19 @@ import { Images } from '../assets/images';
 import { AppText } from '../components/ui/AppText';
 import { Fonts } from '../constants/fonts';
 
-type LoginNavigationProp = NativeStackNavigationProp<
+type RegisterNavigationProp = NativeStackNavigationProp<
   RootStackParamsList,
-  'Login'
+  'Register'
 >;
 
-export default function Login() {
-  const navigation = useNavigation<LoginNavigationProp>();
+export default function Register() {
+  const navigation = useNavigation<RegisterNavigationProp>();
 
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [agreeTerms, setAgreeTerms] = useState(false);
 
   return (
     <ImageBackground
@@ -48,10 +50,28 @@ export default function Login() {
 
       {/* Body */}
       <View style={styles.body}>
-        <AppText style={styles.title}>Login</AppText>
+        <AppText style={styles.title}>Create an account</AppText>
 
         {/* Inputs */}
         <View style={styles.inputGroup}>
+          {/* Name */}
+          <View style={styles.inputWrapper}>
+            <Image
+              source={Images.person}
+              resizeMode="center"
+              style={styles.iconPerson}
+            />
+            <TextInput
+              style={styles.input}
+              value={name}
+              onChangeText={setName}
+              placeholder="Name"
+              placeholderTextColor="#FAB400"
+              autoCapitalize="words"
+              autoCorrect={false}
+            />
+          </View>
+
           {/* Email */}
           <View style={styles.inputWrapper}>
             <Image
@@ -88,41 +108,57 @@ export default function Login() {
               secureTextEntry
               autoCapitalize="none"
               autoCorrect={false}
-              autoComplete="password"
+            />
+          </View>
+
+          {/* Confirm Password */}
+          <View style={styles.inputWrapper}>
+            <Image
+              source={Images.lock}
+              resizeMode="center"
+              style={styles.iconLock}
+            />
+            <TextInput
+              style={styles.input}
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+              placeholder="Confirm Password"
+              placeholderTextColor="#FAB400"
+              secureTextEntry
+              autoCapitalize="none"
+              autoCorrect={false}
             />
           </View>
         </View>
 
-        {/* Remember / Forgot */}
+        {/* Terms */}
         <View style={styles.optionsRow}>
           <View style={styles.rememberMe}>
             <CheckBox
-              value={rememberMe}
-              onValueChange={setRememberMe}
+              value={agreeTerms}
+              onValueChange={setAgreeTerms}
               tintColors={{
                 true: '#FAE7B3',
                 false: '#aaaaaa',
               }}
             />
-            <AppText style={styles.smallText}>Remember me</AppText>
+            <AppText style={styles.smallText}>I agree to the terms</AppText>
           </View>
-
-          <AppText style={styles.smallText}>Forgot password?</AppText>
         </View>
 
-        {/* Login Button */}
-        <Pressable style={styles.button} onPress={()=> navigation.navigate("AppNavigator")}>
-          <AppText style={styles.buttonText}>Login</AppText>
+        {/* Register Button */}
+        <Pressable style={styles.button}>
+          <AppText style={styles.buttonText}>Sign Up</AppText>
         </Pressable>
 
-        {/* Register Redirect */}
+        {/* Login Redirect */}
         <AppText style={styles.signupText}>
-          Don’t have an account?{' '}
+          Already have an account?{' '}
           <Text
             style={styles.signupLink}
-            onPress={() => navigation.navigate('Register')}
+            onPress={() => navigation.navigate('Login')}
           >
-            Sign Up
+            Login
           </Text>
         </AppText>
       </View>
@@ -151,9 +187,10 @@ const styles = StyleSheet.create({
 
   title: {
     fontFamily: Fonts.Bold,
-    fontSize: 35,
+    fontSize: 20,
     color: '#000',
-    marginBottom: 40,
+    marginBottom: 20,
+    marginTop: 100,
   },
 
   inputGroup: {
@@ -176,11 +213,7 @@ const styles = StyleSheet.create({
   },
 
   optionsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 6,
-    marginBottom: 10,
+    marginTop: 10,
   },
 
   rememberMe: {
@@ -219,6 +252,14 @@ const styles = StyleSheet.create({
     color: '#FFC122',
     fontFamily: Fonts.Bold,
     textDecorationLine: 'underline',
+  },
+
+  iconPerson: {
+    width: 12,
+    height: 10,
+    position: 'absolute',
+    top: 16,
+    left: 15,
   },
 
   iconEmail: {

@@ -4,5 +4,5 @@ export const Images = {
   rightLogo: require('./Vector.png'),
   email: require('./email.png'),
   lock: require('./lock.png'),
-  
+  person: require('./person.png'),
 };
