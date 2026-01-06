@@ -15,7 +15,7 @@ export type RootStackParamsList = {
 export default function RootNavigator() {
   return (
     <Stack.Navigator
-      screenOptions={{ headerShown: false }}
+      screenOptions={{ headerShown: false, animation: 'none' }}
       initialRouteName="Login"
     >
       <Stack.Screen name="AppNavigator" component={AppNavigator} />

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "974106339712",
+    "project_id": "react-native-auth-test-75b6d",
+    "storage_bucket": "react-native-auth-test-75b6d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:974106339712:android:c4c34816dc778da1cb3965",
+        "android_client_info": {
+          "package_name": "com.test"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBupHdDDLfnv1LRUSufKRB6jAQAYoCIsCs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

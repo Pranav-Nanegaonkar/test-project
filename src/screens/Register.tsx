@@ -7,6 +7,7 @@ import {
   Text,
   TextInput,
   View,
+  Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -31,24 +32,72 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [agreeTerms, setAgreeTerms] = useState(false);
 
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  /* ------------------ Validation Helpers ------------------ */
+
+  const validateEmail = (value: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  };
+
+  const validatePassword = (value: string) => {
+    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/.test(value);
+  };
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+
+    if (!name.trim()) newErrors.name = 'Name is required';
+
+    else if (name.trim().length < 3)
+      newErrors.name = 'Name must be at least 3 characters';
+
+    if (!email.trim()) newErrors.email = 'Email is required';
+    else if (!validateEmail(email.trim()))
+      newErrors.email = 'Enter a valid email';
+
+    if (!password) newErrors.password = 'Password is required';
+    else if (!validatePassword(password))
+      newErrors.password =
+        'Password must be 8+ chars, include upper, lower, number & symbol';
+
+    if (!confirmPassword) newErrors.confirmPassword = 'Confirm your password';
+    else if (password !== confirmPassword)
+      newErrors.confirmPassword = 'Passwords do not match';
+
+    if (!agreeTerms) newErrors.terms = 'You must agree to the terms';
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  /* ------------------ Submit Handler ------------------ */
+
+  const handleRegister = () => {
+    if (!validateForm()) return;
+
+    // Production: Replace with API call
+    Alert.alert('Success', 'Account created successfully');
+
+    console.log({
+      name: name.trim(),
+      email: email.trim(),
+      password,
+    });
+  };
+
   return (
     <ImageBackground
       source={Images.bg}
       resizeMode="stretch"
       style={styles.container}
     >
-      {/* Top Logos */}
+      {/* Logos */}
       <View style={styles.topLogos}>
-        <Image source={Images.leftLogo} width={100} height={100} />
-        <Image
-          source={Images.rightLogo}
-          width={100}
-          height={100}
-          style={{ alignSelf: 'center' }}
-        />
+        <Image source={Images.leftLogo} />
+        <Image source={Images.rightLogo} />
       </View>
 
-      {/* Body */}
       <View style={styles.body}>
         <AppText style={styles.title}>Create an account</AppText>
 
@@ -56,105 +105,85 @@ export default function Register() {
         <View style={styles.inputGroup}>
           {/* Name */}
           <View style={styles.inputWrapper}>
-            <Image
-              source={Images.person}
-              resizeMode="center"
-              style={styles.iconPerson}
-            />
+            <Image source={Images.person} style={styles.iconPerson} />
             <TextInput
               style={styles.input}
               value={name}
               onChangeText={setName}
               placeholder="Name"
               placeholderTextColor="#FAB400"
-              autoCapitalize="words"
-              autoCorrect={false}
             />
+            {errors.name && <Text style={styles.error}>{errors.name}</Text>}
           </View>
 
           {/* Email */}
           <View style={styles.inputWrapper}>
-            <Image
-              source={Images.email}
-              resizeMode="center"
-              style={styles.iconEmail}
-            />
+            <Image source={Images.email} style={styles.iconEmail} />
             <TextInput
               style={styles.input}
               value={email}
               onChangeText={setEmail}
               keyboardType="email-address"
               autoCapitalize="none"
-              autoCorrect={false}
-              autoComplete="email"
               placeholder="Email"
               placeholderTextColor="#FAB400"
             />
+            {errors.email && <Text style={styles.error}>{errors.email}</Text>}
           </View>
 
           {/* Password */}
           <View style={styles.inputWrapper}>
-            <Image
-              source={Images.lock}
-              resizeMode="center"
-              style={styles.iconLock}
-            />
+            <Image source={Images.lock} style={styles.iconLock} />
             <TextInput
               style={styles.input}
               value={password}
               onChangeText={setPassword}
+              secureTextEntry
               placeholder="Password"
               placeholderTextColor="#FAB400"
-              secureTextEntry
-              autoCapitalize="none"
-              autoCorrect={false}
             />
+            {errors.password && (
+              <Text style={styles.error}>{errors.password}</Text>
+            )}
           </View>
 
           {/* Confirm Password */}
           <View style={styles.inputWrapper}>
-            <Image
-              source={Images.lock}
-              resizeMode="center"
-              style={styles.iconLock}
-            />
+            <Image source={Images.lock} style={styles.iconLock} />
             <TextInput
               style={styles.input}
               value={confirmPassword}
               onChangeText={setConfirmPassword}
+              secureTextEntry
               placeholder="Confirm Password"
               placeholderTextColor="#FAB400"
-              secureTextEntry
-              autoCapitalize="none"
-              autoCorrect={false}
             />
+            {errors.confirmPassword && (
+              <Text style={styles.error}>{errors.confirmPassword}</Text>
+            )}
           </View>
         </View>
 
         {/* Terms */}
-        <View style={styles.optionsRow}>
-          <View style={styles.rememberMe}>
-            <CheckBox
-              value={agreeTerms}
-              onValueChange={setAgreeTerms}
-              tintColors={{
-                true: '#FAE7B3',
-                false: '#aaaaaa',
-              }}
-            />
-            <AppText style={styles.smallText}>I agree to the terms</AppText>
-          </View>
+        <View style={styles.rememberMe}>
+          <CheckBox
+            value={agreeTerms}
+            onValueChange={setAgreeTerms}
+            tintColors={{ true: '#FAE7B3', false: '#aaaaaa' }}
+          />
+          <AppText style={styles.smallText}>I agree to the terms</AppText>
         </View>
+        {errors.terms && <Text style={styles.error}>{errors.terms}</Text>}
 
-        {/* Register Button */}
-        <Pressable style={styles.button} onPress={()=>{
-          console.log({name, email, password, confirmPassword, agreeTerms });
-          
-        }} >
+        {/* Button */}
+        <Pressable
+          style={[styles.button, !agreeTerms && styles.disabledButton]}
+          disabled={!agreeTerms}
+          onPress={handleRegister}
+        >
           <AppText style={styles.buttonText}>Sign Up</AppText>
         </Pressable>
 
-        {/* Login Redirect */}
         <AppText style={styles.signupText}>
           Already have an account?{' '}
           <Text
@@ -169,17 +198,16 @@ export default function Register() {
   );
 }
 
+/* ------------------ Styles ------------------ */
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: { flex: 1 },
 
   topLogos: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'baseline',
-    marginTop: 30,
     paddingHorizontal: 50,
+    marginTop: 30,
   },
 
   body: {
@@ -191,37 +219,34 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: Fonts.Bold,
     fontSize: 20,
-    color: '#000',
     marginBottom: 20,
     marginTop: 100,
   },
 
-  inputGroup: {
-    rowGap: 30,
-  },
+  inputGroup: { rowGap: 24 },
 
-  inputWrapper: {
-    position: 'relative',
-  },
+  inputWrapper: { position: 'relative' },
 
   input: {
     height: 40,
-    fontSize: 15,
     fontFamily: Fonts.Regular,
-    color: '#FAB400',
     borderBottomWidth: 1.5,
     borderColor: '#b784035e',
     paddingLeft: 32,
-    paddingBottom: 5,
+    color: '#FAB400',
   },
 
-  optionsRow: {
-    marginTop: 10,
+  error: {
+    fontSize: 10,
+    color: 'red',
+    marginTop: 4,
+    fontFamily: Fonts.Regular,
   },
 
   rememberMe: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginTop: 10,
   },
 
   smallText: {
@@ -238,11 +263,13 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
 
+  disabledButton: {
+    opacity: 0.5,
+  },
+
   buttonText: {
     fontFamily: Fonts.Bold,
     fontSize: 16,
-    textTransform: 'uppercase',
-    color: '#000',
   },
 
   signupText: {
@@ -254,7 +281,6 @@ const styles = StyleSheet.create({
   signupLink: {
     color: '#FFC122',
     fontFamily: Fonts.Bold,
-    textDecorationLine: 'underline',
   },
 
   iconPerson: {
@@ -264,20 +290,6 @@ const styles = StyleSheet.create({
     top: 16,
     left: 15,
   },
-
-  iconEmail: {
-    width: 12,
-    height: 10,
-    position: 'absolute',
-    top: 16,
-    left: 15,
-  },
-
-  iconLock: {
-    width: 11,
-    height: 14,
-    position: 'absolute',
-    top: 14,
-    left: 15,
-  },
+  iconEmail: { width: 12, height: 10, position: 'absolute', top: 16, left: 15 },
+  iconLock: { width: 11, height: 14, position: 'absolute', top: 14, left: 15 },
 });

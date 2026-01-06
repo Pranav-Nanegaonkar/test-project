@@ -7,6 +7,8 @@ import {
   Text,
   TextInput,
   View,
+  Alert,
+  ToastAndroid,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -16,6 +18,12 @@ import { RootStackParamsList } from '../navigation/RootNavigator';
 import { Images } from '../assets/images';
 import { AppText } from '../components/ui/AppText';
 import { Fonts } from '../constants/fonts';
+import { useAuth } from '../context/AuthContext';
+import {
+  firebaseSignIn,
+  firebaseSignUp,
+} from '../services/firebaseAuth.service';
+import { Storage } from '../utils/Storage';
 
 type LoginNavigationProp = NativeStackNavigationProp<
   RootStackParamsList,
@@ -28,6 +36,61 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const { loading, user, setUser } = useAuth();
+
+  /* ------------------ Helpers ------------------ */
+
+  const validateEmail = (value: string) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+
+    if (!email.trim()) newErrors.email = 'Email is required';
+    else if (!validateEmail(email.trim()))
+      newErrors.email = 'Enter a valid email';
+
+    if (!password) newErrors.password = 'Password is required';
+    else if (password.length < 6)
+      newErrors.password = 'Password must be at least 6 characters';
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  /* ------------------ Submit ------------------ */
+
+  const handleLogin = async () => {
+    if (!validateForm()) return;
+
+    // 🔐 Replace with API call
+    console.log({
+      email: email.trim(),
+      password,
+      rememberMe,
+    });
+
+    try {
+      const { user } = await firebaseSignIn(email.trim(), password.trim());
+
+      console.log(user);
+      setUser(user);
+
+      try {
+        await Storage.set('user', user);
+      } catch (error: any) {
+        console.log('error while storing user: ', error.message);
+      }
+
+      navigation.replace('AppNavigator');
+      ToastAndroid.show('login Succesfully', 2000);
+    } catch (error: any) {
+      console.log('Error while Register :', error.message);
+      ToastAndroid.show('Invalid Credentials', 2000);
+    }
+  };
 
   return (
     <ImageBackground
@@ -35,18 +98,12 @@ export default function Login() {
       resizeMode="stretch"
       style={styles.container}
     >
-      {/* Top Logos */}
+      {/* Logos */}
       <View style={styles.topLogos}>
-        <Image source={Images.leftLogo} width={100} height={100} />
-        <Image
-          source={Images.rightLogo}
-          width={100}
-          height={100}
-          style={{ alignSelf: 'center' }}
-        />
+        <Image source={Images.leftLogo} />
+        <Image source={Images.rightLogo} />
       </View>
 
-      {/* Body */}
       <View style={styles.body}>
         <AppText style={styles.title}>Login</AppText>
 
@@ -54,42 +111,33 @@ export default function Login() {
         <View style={styles.inputGroup}>
           {/* Email */}
           <View style={styles.inputWrapper}>
-            <Image
-              source={Images.email}
-              resizeMode="center"
-              style={styles.iconEmail}
-            />
+            <Image source={Images.email} style={styles.iconEmail} />
             <TextInput
               style={styles.input}
               value={email}
               onChangeText={setEmail}
               keyboardType="email-address"
               autoCapitalize="none"
-              autoCorrect={false}
-              autoComplete="email"
               placeholder="Email"
               placeholderTextColor="#FAB400"
             />
+            {errors.email && <Text style={styles.error}>{errors.email}</Text>}
           </View>
 
           {/* Password */}
           <View style={styles.inputWrapper}>
-            <Image
-              source={Images.lock}
-              resizeMode="center"
-              style={styles.iconLock}
-            />
+            <Image source={Images.lock} style={styles.iconLock} />
             <TextInput
               style={styles.input}
               value={password}
               onChangeText={setPassword}
+              secureTextEntry
               placeholder="Password"
               placeholderTextColor="#FAB400"
-              secureTextEntry
-              autoCapitalize="none"
-              autoCorrect={false}
-              autoComplete="password"
             />
+            {errors.password && (
+              <Text style={styles.error}>{errors.password}</Text>
+            )}
           </View>
         </View>
 
@@ -99,29 +147,20 @@ export default function Login() {
             <CheckBox
               value={rememberMe}
               onValueChange={setRememberMe}
-              tintColors={{
-                true: '#FAE7B3',
-                false: '#aaaaaa',
-              }}
+              tintColors={{ true: '#FAE7B3', false: '#aaaaaa' }}
             />
             <AppText style={styles.smallText}>Remember me</AppText>
           </View>
 
-          <AppText style={styles.smallText}>Forgot password?</AppText>
+          <Text style={styles.forgotText}>Forgot password?</Text>
         </View>
 
         {/* Login Button */}
-        <Pressable
-          style={styles.button}
-          onPress={() => {
-            console.log({ email, password, rememberMe });
-            navigation.navigate('AppNavigator');
-          }}
-        >
+        <Pressable style={styles.button} onPress={handleLogin}>
           <AppText style={styles.buttonText}>Login</AppText>
         </Pressable>
 
-        {/* Register Redirect */}
+        {/* Register */}
         <AppText style={styles.signupText}>
           Don’t have an account?{' '}
           <Text
@@ -136,17 +175,16 @@ export default function Login() {
   );
 }
 
+/* ------------------ Styles ------------------ */
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: { flex: 1 },
 
   topLogos: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'baseline',
-    marginTop: 30,
     paddingHorizontal: 50,
+    marginTop: 30,
   },
 
   body: {
@@ -158,35 +196,33 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: Fonts.Bold,
     fontSize: 35,
-    color: '#000',
     marginBottom: 40,
   },
 
-  inputGroup: {
-    rowGap: 30,
-  },
+  inputGroup: { rowGap: 30 },
 
-  inputWrapper: {
-    position: 'relative',
-  },
+  inputWrapper: { position: 'relative' },
 
   input: {
     height: 40,
-    fontSize: 15,
     fontFamily: Fonts.Regular,
-    color: '#FAB400',
     borderBottomWidth: 1.5,
     borderColor: '#b784035e',
     paddingLeft: 32,
-    paddingBottom: 5,
+    color: '#FAB400',
+  },
+
+  error: {
+    fontSize: 10,
+    color: 'red',
+    marginTop: 4,
+    fontFamily: Fonts.Regular,
   },
 
   optionsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
     marginTop: 6,
-    marginBottom: 10,
   },
 
   rememberMe: {
@@ -197,6 +233,12 @@ const styles = StyleSheet.create({
   smallText: {
     fontSize: 10,
     fontFamily: Fonts.Regular,
+  },
+
+  forgotText: {
+    fontSize: 10,
+    fontFamily: Fonts.Regular,
+    color: '#FFC122',
   },
 
   button: {
@@ -212,7 +254,6 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.Bold,
     fontSize: 16,
     textTransform: 'uppercase',
-    color: '#000',
   },
 
   signupText: {
@@ -227,19 +268,6 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
 
-  iconEmail: {
-    width: 12,
-    height: 10,
-    position: 'absolute',
-    top: 16,
-    left: 15,
-  },
-
-  iconLock: {
-    width: 11,
-    height: 14,
-    position: 'absolute',
-    top: 14,
-    left: 15,
-  },
+  iconEmail: { width: 12, height: 10, position: 'absolute', top: 16, left: 15 },
+  iconLock: { width: 11, height: 14, position: 'absolute', top: 14, left: 15 },
 });
