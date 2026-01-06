@@ -111,7 +111,13 @@ export default function Login() {
         </View>
 
         {/* Login Button */}
-        <Pressable style={styles.button} onPress={()=> navigation.navigate("AppNavigator")}>
+        <Pressable
+          style={styles.button}
+          onPress={() => {
+            console.log({ email, password, rememberMe });
+            navigation.navigate('AppNavigator');
+          }}
+        >
           <AppText style={styles.buttonText}>Login</AppText>
         </Pressable>
 

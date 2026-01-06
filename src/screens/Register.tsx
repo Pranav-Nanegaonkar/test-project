@@ -147,7 +147,10 @@ export default function Register() {
         </View>
 
         {/* Register Button */}
-        <Pressable style={styles.button}>
+        <Pressable style={styles.button} onPress={()=>{
+          console.log({name, email, password, confirmPassword, agreeTerms });
+          
+        }} >
           <AppText style={styles.buttonText}>Sign Up</AppText>
         </Pressable>
 
