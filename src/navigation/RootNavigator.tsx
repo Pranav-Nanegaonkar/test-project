@@ -1,28 +1,39 @@
-import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { ActivityIndicator, View } from 'react-native';
+
 import Login from '../screens/Login';
-import AppNavigator from './AppNavigator';
 import Register from '../screens/Register';
+import Profile from '../screens/Profile';
 
-const Stack = createNativeStackNavigator<RootStackParamsList>();
+import { useAuth } from '../context/AuthContext';
+import AppNavigator from './AppNavigator';
 
-export type RootStackParamsList = {
-  Login: undefined;
-  Register: undefined;
-  AppNavigator: undefined;
-};
-export default function RootNavigator() {
-  return (
-    <Stack.Navigator
-      screenOptions={{ headerShown: false, animation: 'none' }}
-      initialRouteName="Login"
-    >
+const Stack = createNativeStackNavigator();
+
+const RootNavigator = () => {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
+  return user ? (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="AppNavigator" component={AppNavigator} />
+      <Stack.Screen name="Profile" component={Profile} />
+    </Stack.Navigator>
+  ) : (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Register" component={Register} />
     </Stack.Navigator>
   );
-}
+};
 
-const styles = StyleSheet.create({});
+export default RootNavigator;

@@ -1,4 +1,3 @@
-import { StyleSheet, Text, View } from 'react-native';
 import React, {
   createContext,
   ReactNode,
@@ -7,36 +6,35 @@ import React, {
   useState,
 } from 'react';
 import { FirebaseAuthTypes } from '@react-native-firebase/auth';
-import { Storage } from '../utils/Storage';
+import { firebaseAuthListener } from '../services/firebaseAuth.service';
+;
 
 interface AuthContextProps {
   user: FirebaseAuthTypes.User | null;
-  setUser: (user: FirebaseAuthTypes.User | null) => void;
   loading: boolean;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
   user: null,
-  setUser: () => {},
-  loading: false,
+  loading: true,
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const getUser = async () => {
-      const user = await Storage.get('user');
+    //  Use your existing Firebase service
+    const unsubscribe = firebaseAuthListener(firebaseUser => {
+      setUser(firebaseUser);
+      setLoading(false);
+    });
 
-      user ? setUser(user) : setUser(null);
-    };
-    
-    getUser();
+    return unsubscribe;
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, setUser, loading }}>
+    <AuthContext.Provider value={{ user, loading }}>
       {children}
     </AuthContext.Provider>
   );

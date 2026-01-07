@@ -5,8 +5,7 @@ import { useAuth } from '../context/AuthContext';
 export default function Profile() {
   const { user } = useAuth();
 
-  console.log(user);
-
+  
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Profile</Text>

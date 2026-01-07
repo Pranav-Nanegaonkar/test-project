@@ -1,14 +1,15 @@
 import { Button, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
-
+import { firebaseLogout } from '../services/firebaseAuth.service';
 
 export default function Home() {
   const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Home</Text>
-      <Button title="Go back" onPress={() => navigation.goBack()} />
+      <Button title="Logout" onPress={async () => await firebaseLogout()} />
     </View>
   );
 }

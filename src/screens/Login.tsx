@@ -7,40 +7,25 @@ import {
   Text,
   TextInput,
   View,
-  Alert,
   ToastAndroid,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import CheckBox from '@react-native-community/checkbox';
 
-import { RootStackParamsList } from '../navigation/RootNavigator';
 import { Images } from '../assets/images';
 import { AppText } from '../components/ui/AppText';
 import { Fonts } from '../constants/fonts';
-import { useAuth } from '../context/AuthContext';
-import {
-  firebaseSignIn,
-  firebaseSignUp,
-} from '../services/firebaseAuth.service';
-import { Storage } from '../utils/Storage';
-
-type LoginNavigationProp = NativeStackNavigationProp<
-  RootStackParamsList,
-  'Login'
->;
+import { firebaseSignIn } from '../services/firebaseAuth.service';
 
 export default function Login() {
-  const navigation = useNavigation<LoginNavigationProp>();
+  const navigation = useNavigation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const { loading, user, setUser } = useAuth();
-
-  /* ------------------ Helpers ------------------ */
+  /* ------------------ Validation ------------------ */
 
   const validateEmail = (value: string) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -60,35 +45,22 @@ export default function Login() {
     return Object.keys(newErrors).length === 0;
   };
 
-  /* ------------------ Submit ------------------ */
+  /* ------------------ Login ------------------ */
 
   const handleLogin = async () => {
     if (!validateForm()) return;
 
-    // 🔐 Replace with API call
-    console.log({
-      email: email.trim(),
-      password,
-      rememberMe,
-    });
-
     try {
-      const { user } = await firebaseSignIn(email.trim(), password.trim());
+      await firebaseSignIn(email.trim(), password.trim());
 
-      console.log(user);
-      setUser(user);
+      // ✅ NO navigation
+      // ✅ NO setUser
+      // ✅ NO AsyncStorage
 
-      try {
-        await Storage.set('user', user);
-      } catch (error: any) {
-        console.log('error while storing user: ', error.message);
-      }
-
-      navigation.replace('AppNavigator');
-      ToastAndroid.show('login Succesfully', 2000);
+      ToastAndroid.show('Login successful', ToastAndroid.SHORT);
     } catch (error: any) {
-      console.log('Error while Register :', error.message);
-      ToastAndroid.show('Invalid Credentials', 2000);
+      console.log('Login error:', error.message);
+      ToastAndroid.show('Invalid credentials', ToastAndroid.SHORT);
     }
   };
 
@@ -109,7 +81,6 @@ export default function Login() {
 
         {/* Inputs */}
         <View style={styles.inputGroup}>
-          {/* Email */}
           <View style={styles.inputWrapper}>
             <Image source={Images.email} style={styles.iconEmail} />
             <TextInput
@@ -124,7 +95,6 @@ export default function Login() {
             {errors.email && <Text style={styles.error}>{errors.email}</Text>}
           </View>
 
-          {/* Password */}
           <View style={styles.inputWrapper}>
             <Image source={Images.lock} style={styles.iconLock} />
             <TextInput
@@ -155,17 +125,15 @@ export default function Login() {
           <Text style={styles.forgotText}>Forgot password?</Text>
         </View>
 
-        {/* Login Button */}
         <Pressable style={styles.button} onPress={handleLogin}>
           <AppText style={styles.buttonText}>Login</AppText>
         </Pressable>
 
-        {/* Register */}
         <AppText style={styles.signupText}>
           Don’t have an account?{' '}
           <Text
             style={styles.signupLink}
-            onPress={() => navigation.navigate('Register')}
+            onPress={() => navigation.navigate('Register' as never)}
           >
             Sign Up
           </Text>
@@ -175,34 +143,19 @@ export default function Login() {
   );
 }
 
-/* ------------------ Styles ------------------ */
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-
   topLogos: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 50,
     marginTop: 30,
   },
-
-  body: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 70,
-  },
-
-  title: {
-    fontFamily: Fonts.Bold,
-    fontSize: 35,
-    marginBottom: 40,
-  },
-
+  body: { flex: 1, justifyContent: 'center', paddingHorizontal: 70 },
+  title: { fontFamily: Fonts.Bold, fontSize: 35, marginBottom: 40 },
   inputGroup: { rowGap: 30 },
-
   inputWrapper: { position: 'relative' },
-
   input: {
     height: 40,
     fontFamily: Fonts.Regular,
@@ -211,36 +164,20 @@ const styles = StyleSheet.create({
     paddingLeft: 32,
     color: '#FAB400',
   },
-
   error: {
     fontSize: 10,
     color: 'red',
     marginTop: 4,
     fontFamily: Fonts.Regular,
   },
-
   optionsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 6,
   },
-
-  rememberMe: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-
-  smallText: {
-    fontSize: 10,
-    fontFamily: Fonts.Regular,
-  },
-
-  forgotText: {
-    fontSize: 10,
-    fontFamily: Fonts.Regular,
-    color: '#FFC122',
-  },
-
+  rememberMe: { flexDirection: 'row', alignItems: 'center' },
+  smallText: { fontSize: 10, fontFamily: Fonts.Regular },
+  forgotText: { fontSize: 10, fontFamily: Fonts.Regular, color: '#FFC122' },
   button: {
     backgroundColor: '#FFC122',
     height: 32,
@@ -249,25 +186,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 20,
   },
-
   buttonText: {
     fontFamily: Fonts.Bold,
     fontSize: 16,
     textTransform: 'uppercase',
   },
-
-  signupText: {
-    fontFamily: Fonts.Medium,
-    fontSize: 12,
-    textAlign: 'center',
-  },
-
+  signupText: { fontFamily: Fonts.Medium, fontSize: 12, textAlign: 'center' },
   signupLink: {
     color: '#FFC122',
     fontFamily: Fonts.Bold,
     textDecorationLine: 'underline',
   },
-
   iconEmail: { width: 12, height: 10, position: 'absolute', top: 16, left: 15 },
   iconLock: { width: 11, height: 14, position: 'absolute', top: 14, left: 15 },
 });
