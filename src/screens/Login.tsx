@@ -8,6 +8,8 @@ import {
   TextInput,
   View,
   ToastAndroid,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import CheckBox from '@react-native-community/checkbox';
@@ -42,20 +44,15 @@ export default function Login() {
       newErrors.password = 'Password must be at least 6 characters';
 
     setErrors(newErrors);
+
     return Object.keys(newErrors).length === 0;
   };
-
-  /* ------------------ Login ------------------ */
 
   const handleLogin = async () => {
     if (!validateForm()) return;
 
     try {
       await firebaseSignIn(email.trim(), password.trim());
-
-      // ✅ NO navigation
-      // ✅ NO setUser
-      // ✅ NO AsyncStorage
 
       ToastAndroid.show('Login successful', ToastAndroid.SHORT);
     } catch (error: any) {
@@ -70,79 +67,90 @@ export default function Login() {
       resizeMode="stretch"
       style={styles.container}
     >
-      {/* Logos */}
-      <View style={styles.topLogos}>
-        <Image source={Images.leftLogo} />
-        <Image source={Images.rightLogo} />
-      </View>
-
-      <View style={styles.body}>
-        <AppText style={styles.title}>Login</AppText>
-
-        {/* Inputs */}
-        <View style={styles.inputGroup}>
-          <View style={styles.inputWrapper}>
-            <Image source={Images.email} style={styles.iconEmail} />
-            <TextInput
-              style={styles.input}
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              placeholder="Email"
-              placeholderTextColor="#FAB400"
-            />
-            {errors.email && <Text style={styles.error}>{errors.email}</Text>}
-          </View>
-
-          <View style={styles.inputWrapper}>
-            <Image source={Images.lock} style={styles.iconLock} />
-            <TextInput
-              style={styles.input}
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-              placeholder="Password"
-              placeholderTextColor="#FAB400"
-            />
-            {errors.password && (
-              <Text style={styles.error}>{errors.password}</Text>
-            )}
-          </View>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}
+      >
+        {/* Logos */}
+        <View style={styles.topLogos}>
+          <Image source={Images.leftLogo} />
+          <Image source={Images.rightLogo} />
         </View>
 
-        {/* Remember / Forgot */}
-        <View style={styles.optionsRow}>
-          <View style={styles.rememberMe}>
-            <CheckBox
-              value={rememberMe}
-              onValueChange={setRememberMe}
-              tintColors={{ true: '#FAE7B3', false: '#aaaaaa' }}
-            />
-            <AppText style={styles.smallText}>Remember me</AppText>
+        <View style={styles.body}>
+          <AppText style={styles.title}>Login</AppText>
+
+          {/* Inputs */}
+          <View style={styles.inputGroup}>
+            <View style={styles.inputWrapper}>
+              <Image source={Images.email} style={styles.iconEmail} />
+              <TextInput
+                style={styles.input}
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                placeholder="Email"
+                placeholderTextColor="#FAB400"
+              />
+              {errors.email && <Text style={styles.error}>{errors.email}</Text>}
+            </View>
+
+            <View style={styles.inputWrapper}>
+              <Image source={Images.lock} style={styles.iconLock} />
+              <TextInput
+                style={styles.input}
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+                placeholder="Password"
+                placeholderTextColor="#FAB400"
+              />
+              {errors.password && (
+                <Text style={styles.error}>{errors.password}</Text>
+              )}
+            </View>
           </View>
 
-          <Text style={styles.forgotText}>Forgot password?</Text>
-        </View>
+          {/* Remember / Forgot */}
+          <View style={styles.optionsRow}>
+            <View style={styles.rememberMe}>
+              <CheckBox
+                value={rememberMe}
+                onValueChange={setRememberMe}
+                tintColors={{ true: '#FAE7B3', false: '#aaaaaa' }}
+              />
+              <AppText style={styles.smallText}>Remember me</AppText>
+            </View>
 
-        <Pressable style={styles.button} onPress={handleLogin}>
-          <AppText style={styles.buttonText}>Login</AppText>
-        </Pressable>
+            <Text style={styles.forgotText}>Forgot password?</Text>
+          </View>
 
-        <AppText style={styles.signupText}>
-          Don’t have an account?{' '}
-          <Text
-            style={styles.signupLink}
-            onPress={() => navigation.navigate('Register' as never)}
+          <Pressable
+            onPress={handleLogin}
+            style={[
+              styles.button,
+              (!email || !password) && styles.disabledButton,
+            ]}
+            disabled={!email|| !password ? true : false}
           >
-            Sign Up
-          </Text>
-        </AppText>
-      </View>
+            <AppText style={styles.buttonText}>Login</AppText>
+          </Pressable>
+
+          <AppText style={styles.signupText}>
+            Don’t have an account?{' '}
+            <Text
+              style={styles.signupLink}
+              onPress={() => navigation.navigate('Register' as never)}
+            >
+              Sign Up
+            </Text>
+          </AppText>
+        </View>
+      </KeyboardAvoidingView>
     </ImageBackground>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
@@ -199,4 +207,5 @@ const styles = StyleSheet.create({
   },
   iconEmail: { width: 12, height: 10, position: 'absolute', top: 16, left: 15 },
   iconLock: { width: 11, height: 14, position: 'absolute', top: 14, left: 15 },
+  disabledButton: { opacity: 0.5 },
 });

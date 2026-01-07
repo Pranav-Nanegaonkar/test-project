@@ -7,9 +7,12 @@ import Profile from '../screens/Profile';
 
 import { House, User } from 'lucide-react-native';
 
+
+
 type BottomTabProps = {
   Home: undefined;
   Profile: undefined;
+  Menu: undefined;
 };
 
 const Tab = createBottomTabNavigator<BottomTabProps>();
@@ -28,16 +31,16 @@ const TabBarIcon = ({ focused, icon, label }: TabBarIconProps) => {
       ) : (
         <User color={focused ? '#2196f3' : 'gray'} size={24} />
       )}
-
       {focused && <Text style={styles.label}>{label}</Text>}
     </View>
   );
 };
 
-export default function AppNavigator() {
+export default function TabNavigator() {
   return (
     <Tab.Navigator
       screenOptions={{
+
         headerShown: false,
         tabBarShowLabel: false, // ⬅️ IMPORTANT
         tabBarStyle: {
@@ -54,6 +57,9 @@ export default function AppNavigator() {
           paddingVertical: 12,
         },
       }}
+
+     
+      initialRouteName="Home"
     >
       <Tab.Screen
         name="Home"

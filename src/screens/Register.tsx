@@ -8,6 +8,7 @@ import {
   TextInput,
   View,
   Alert,
+  ToastAndroid,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -17,6 +18,7 @@ import { RootStackParamsList } from '../navigation/RootNavigator';
 import { Images } from '../assets/images';
 import { AppText } from '../components/ui/AppText';
 import { Fonts } from '../constants/fonts';
+import { firebaseSignUp } from '../services/firebaseAuth.service';
 
 type RegisterNavigationProp = NativeStackNavigationProp<
   RootStackParamsList,
@@ -48,7 +50,6 @@ export default function Register() {
     const newErrors: Record<string, string> = {};
 
     if (!name.trim()) newErrors.name = 'Name is required';
-
     else if (name.trim().length < 3)
       newErrors.name = 'Name must be at least 3 characters';
 
@@ -73,17 +74,24 @@ export default function Register() {
 
   /* ------------------ Submit Handler ------------------ */
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     if (!validateForm()) return;
 
-    // Production: Replace with API call
-    Alert.alert('Success', 'Account created successfully');
+    try {
+      const result = await firebaseSignUp(email.trim(), password.trim());
+      console.log(result);
 
-    console.log({
-      name: name.trim(),
-      email: email.trim(),
-      password,
-    });
+      ToastAndroid.show('Register successful', ToastAndroid.SHORT);
+    } catch (error: any) {
+      if (error.message.includes('[auth/email-already-in-use]')) {
+
+        console.log('Login error:', error.message);
+        ToastAndroid.show('The email address is already exist', ToastAndroid.SHORT);
+      } else {
+        console.log('Login error:', error.message);
+        ToastAndroid.show('Someting went wrong try again', ToastAndroid.SHORT);
+      }
+    }
   };
 
   return (
