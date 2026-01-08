@@ -10,10 +10,11 @@ export default function ImagePickerDemo() {
   const pickImage = async () => {
     try {
       const img = await ImagePicker.openPicker({
-        width: 300,
-        height: 200,
+        // width: 300,
+        // height: 200,
         cropping: true,
-        compressImageQuality: 0.8,
+        freeStyleCropEnabled:true,
+        // compressImageQuality: 0.8,
       });
 
       setImage(img);
@@ -86,7 +87,7 @@ export default function ImagePickerDemo() {
         <Image
           source={{ uri: image.path }}
           style={styles.image}
-          resizeMode="cover"
+          resizeMode="contain"
         />
       )}
     </View>

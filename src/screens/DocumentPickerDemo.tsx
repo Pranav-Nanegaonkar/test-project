@@ -5,25 +5,32 @@ import {
   View,
   Pressable,
   FlatList,
+  Alert,
+  ToastAndroid,
 } from 'react-native';
-import DocumentPicker from 'react-native-document-picker';
+
+import { pick, types } from '@react-native-documents/picker';
+
 
 export default function DocumentPickerDemo() {
   const [files, setFiles] = useState<any[]>([]);
 
-  //  Pick single document
+  // 📄 Pick single document
   const pickSingleFile = async () => {
     try {
-      const result = await DocumentPicker.pickSingle({
-        type: [DocumentPicker.types.allFiles],
+      const result = await pick({
+        allowMultiSelection: false, // single
+        type: [types.docx, types.images], // limit types
       });
 
-      setFiles([result]);
-    } catch (error) {
-      if (DocumentPicker.isCancel(error)) {
-        console.log('User cancelled');
+      setFiles(result);
+    } catch (error: any) {
+      //  User cancelled
+      if (error.code === 'OPERATION_CANCELED') {
+        console.log('User cancelled document picker');
       } else {
-        console.error(error);
+        console.log(error);
+        ToastAndroid.show('Failed to pick documents', ToastAndroid.SHORT);
       }
     }
   };
@@ -31,17 +38,20 @@ export default function DocumentPickerDemo() {
   //  Pick multiple documents
   const pickMultipleFiles = async () => {
     try {
-      const results = await DocumentPicker.pick({
+      const results = await pick({
         allowMultiSelection: true,
-        type: [DocumentPicker.types.allFiles],
+        type: [types.docx, types.images],
       });
 
       setFiles(results);
-    } catch (error) {
-      if (DocumentPicker.isCancel(error)) {
-        console.log('User cancelled');
+    } catch (error: any) {
+      // console.log(error.code);
+
+      if (error.code === 'OPERATION_CANCELED') {
+        console.log('User cancelled document picker');
       } else {
-        console.error(error);
+        console.log(error);
+        ToastAndroid.show('Failed to pick documents', ToastAndroid.SHORT);
       }
     }
   };
@@ -58,16 +68,19 @@ export default function DocumentPickerDemo() {
         <Text style={styles.buttonText}>Pick Multiple Files</Text>
       </Pressable>
 
-      {/* File List */}
       <FlatList
+      showsVerticalScrollIndicator={false}
         data={files}
         keyExtractor={(item, index) => index.toString()}
-        style={{ marginTop: 20, width: '100%' }}
+        contentContainerStyle={{ marginTop: 20 }}
         renderItem={({ item }) => (
           <View style={styles.fileCard}>
             <Text style={styles.fileText}>📄 Name: {item.name}</Text>
-            <Text style={styles.fileText}>📦 Size: {item.size} bytes</Text>
             <Text style={styles.fileText}>📁 Type: {item.type}</Text>
+            <Text style={styles.fileText}>
+              📦 Size: {item.size ?? 'N/A'} bytes
+            </Text>
+            <Text style={styles.fileText}>🔗 URI: {item.uri}</Text>
           </View>
         )}
       />
@@ -107,7 +120,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   fileText: {
-    color: '#111827',
     fontSize: 14,
+    color: '#111827',
   },
 });

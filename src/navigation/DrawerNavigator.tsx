@@ -1,18 +1,28 @@
 import { StyleSheet } from 'react-native';
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import Home from '../screens/Home';
-import Profile from '../screens/Profile';
 import TabNavigator from './TabNavigator';
 import ImagePickerDemo from '../screens/ImagePickerDemo';
+import DocumentPickerDemo from '../screens/DocumentPickerDemo';
+import DropDownDemo from '../screens/DropDownDemo';
+import VectorIconDemo from '../screens/VectorIconDemo';
+import Icon from '../utils/Icon';
 
 const Drawer = createDrawerNavigator();
 
 export default function DrawerNavigator() {
   return (
-    <Drawer.Navigator >
+    <Drawer.Navigator
+      screenOptions={{
+        drawerIcon: () => <Icon type="AntDesign" name="menu-fold" size={20} />,
+        drawerActiveTintColor: 'orange',
+      }}
+    >
       <Drawer.Screen name="Menu" component={TabNavigator} />
       <Drawer.Screen name="ImagePickerDemo" component={ImagePickerDemo} />
+      <Drawer.Screen name="DocumentPickerDemo" component={DocumentPickerDemo} />
+      <Drawer.Screen name="DropDownDemo" component={DropDownDemo} />
+      <Drawer.Screen name="VectorIconDemo" component={VectorIconDemo} />
     </Drawer.Navigator>
   );
 }
