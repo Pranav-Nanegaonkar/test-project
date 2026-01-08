@@ -20,6 +20,8 @@ export default function DrawerNavigator() {
         drawerActiveTintColor: 'orange',
         headerShown: false,
       }}
+      // remove this after done
+      initialRouteName="MovieTabNavigator"
     >
       <Drawer.Screen name="Menu" component={TabNavigator} />
       <Drawer.Screen name="ImagePickerDemo" component={ImagePickerDemo} />
