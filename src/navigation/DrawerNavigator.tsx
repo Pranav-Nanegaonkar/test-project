@@ -7,6 +7,8 @@ import DocumentPickerDemo from '../screens/DocumentPickerDemo';
 import DropDownDemo from '../screens/DropDownDemo';
 import VectorIconDemo from '../screens/VectorIconDemo';
 import Icon from '../utils/Icon';
+import Test from './Test';
+import MovieTabNavigator from './MovieTabNavigator';
 
 const Drawer = createDrawerNavigator();
 
@@ -16,6 +18,7 @@ export default function DrawerNavigator() {
       screenOptions={{
         drawerIcon: () => <Icon type="AntDesign" name="menu-fold" size={20} />,
         drawerActiveTintColor: 'orange',
+        headerShown: false,
       }}
     >
       <Drawer.Screen name="Menu" component={TabNavigator} />
@@ -23,6 +26,8 @@ export default function DrawerNavigator() {
       <Drawer.Screen name="DocumentPickerDemo" component={DocumentPickerDemo} />
       <Drawer.Screen name="DropDownDemo" component={DropDownDemo} />
       <Drawer.Screen name="VectorIconDemo" component={VectorIconDemo} />
+      <Drawer.Screen name="Test" component={Test} />
+      <Drawer.Screen name="MovieTabNavigator" component={MovieTabNavigator} />
     </Drawer.Navigator>
   );
 }

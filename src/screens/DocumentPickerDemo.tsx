@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 import { pick, types } from '@react-native-documents/picker';
-
+import CustomHeader from '../components/CustomHeader';
 
 export default function DocumentPickerDemo() {
   const [files, setFiles] = useState<any[]>([]);
@@ -57,34 +57,37 @@ export default function DocumentPickerDemo() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Document Picker</Text>
+    <>
+      <CustomHeader title="DocumentPicker" />
+      <View style={styles.container}>
+        <Text style={styles.title}>Document Picker</Text>
 
-      <Pressable style={styles.button} onPress={pickSingleFile}>
-        <Text style={styles.buttonText}>Pick Single File</Text>
-      </Pressable>
+        <Pressable style={styles.button} onPress={pickSingleFile}>
+          <Text style={styles.buttonText}>Pick Single File</Text>
+        </Pressable>
 
-      <Pressable style={styles.button} onPress={pickMultipleFiles}>
-        <Text style={styles.buttonText}>Pick Multiple Files</Text>
-      </Pressable>
+        <Pressable style={styles.button} onPress={pickMultipleFiles}>
+          <Text style={styles.buttonText}>Pick Multiple Files</Text>
+        </Pressable>
 
-      <FlatList
-      showsVerticalScrollIndicator={false}
-        data={files}
-        keyExtractor={(item, index) => index.toString()}
-        contentContainerStyle={{ marginTop: 20 }}
-        renderItem={({ item }) => (
-          <View style={styles.fileCard}>
-            <Text style={styles.fileText}>📄 Name: {item.name}</Text>
-            <Text style={styles.fileText}>📁 Type: {item.type}</Text>
-            <Text style={styles.fileText}>
-              📦 Size: {item.size ?? 'N/A'} bytes
-            </Text>
-            <Text style={styles.fileText}>🔗 URI: {item.uri}</Text>
-          </View>
-        )}
-      />
-    </View>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={files}
+          keyExtractor={(item, index) => index.toString()}
+          contentContainerStyle={{ marginTop: 20 }}
+          renderItem={({ item }) => (
+            <View style={styles.fileCard}>
+              <Text style={styles.fileText}>📄 Name: {item.name}</Text>
+              <Text style={styles.fileText}>📁 Type: {item.type}</Text>
+              <Text style={styles.fileText}>
+                📦 Size: {item.size ?? 'N/A'} bytes
+              </Text>
+              <Text style={styles.fileText}>🔗 URI: {item.uri}</Text>
+            </View>
+          )}
+        />
+      </View>
+    </>
   );
 }
 
@@ -92,7 +95,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#fff',
   },
   title: {
     fontSize: 26,

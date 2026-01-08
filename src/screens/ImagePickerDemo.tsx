@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Pressable, Image, Alert } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import { SVGLogo } from '../components/svg/SVGComponent';
+import CustomHeader from '../components/CustomHeader';
 
 export default function ImagePickerDemo() {
   const [image, setImage] = useState<any>(null);
@@ -13,7 +14,7 @@ export default function ImagePickerDemo() {
         // width: 300,
         // height: 200,
         cropping: true,
-        freeStyleCropEnabled:true,
+        freeStyleCropEnabled: true,
         // compressImageQuality: 0.8,
       });
 
@@ -62,35 +63,38 @@ export default function ImagePickerDemo() {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <View style={{ marginVertical: 10 }}>
-        <SVGLogo width={40} height={40} />
+    <>
+      <CustomHeader title="ImagePicker" />
+      <View style={styles.container}>
+        <View style={{ marginVertical: 10 }}>
+          <SVGLogo width={40} height={40} />
+        </View>
+
+        <Text style={styles.title}>Image Picker Demo</Text>
+
+        {/* Buttons */}
+        <Pressable style={styles.button} onPress={pickImage}>
+          <Text style={styles.buttonText}>Pick Image</Text>
+        </Pressable>
+
+        <Pressable style={styles.button} onPress={openCamera}>
+          <Text style={styles.buttonText}>Open Camera</Text>
+        </Pressable>
+
+        <Pressable style={[styles.button, styles.cleanBtn]} onPress={cleanUp}>
+          <Text style={styles.buttonText}>Clean Cache</Text>
+        </Pressable>
+
+        {/* Image Preview */}
+        {image && (
+          <Image
+            source={{ uri: image.path }}
+            style={styles.image}
+            resizeMode="contain"
+          />
+        )}
       </View>
-
-      <Text style={styles.title}>Image Picker Demo</Text>
-
-      {/* Buttons */}
-      <Pressable style={styles.button} onPress={pickImage}>
-        <Text style={styles.buttonText}>Pick Image</Text>
-      </Pressable>
-
-      <Pressable style={styles.button} onPress={openCamera}>
-        <Text style={styles.buttonText}>Open Camera</Text>
-      </Pressable>
-
-      <Pressable style={[styles.button, styles.cleanBtn]} onPress={cleanUp}>
-        <Text style={styles.buttonText}>Clean Cache</Text>
-      </Pressable>
-
-      {/* Image Preview */}
-      {image && (
-        <Image
-          source={{ uri: image.path }}
-          style={styles.image}
-          resizeMode="contain"
-        />
-      )}
-    </View>
+    </>
   );
 }
 

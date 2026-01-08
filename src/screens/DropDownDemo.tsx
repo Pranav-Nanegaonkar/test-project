@@ -1,13 +1,16 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import BasicDropdown from '../components/BasicDropdown';
+import CustomHeader from '../components/CustomHeader';
 
 export default function DropDownDemo() {
   return (
-    <View >
-      <BasicDropdown />
-   
-    </View>
+    <>
+      <CustomHeader title="DropDown" />
+      <View>
+        <BasicDropdown />
+      </View>
+    </>
   );
 }
 

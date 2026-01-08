@@ -28,7 +28,6 @@ export const SVGLogo = (props: any) => (
   </Svg>
 );
 
-const { width, height } = Dimensions.get('window');
 
 export const SVGBackground = (props: any) => (
   <Svg
@@ -110,10 +109,3 @@ export const SVGBackground = (props: any) => (
   </Svg>
 );
 
-const styles = StyleSheet.create({
-  svg: {
-    position: 'absolute', // acts like background
-    top: 0,
-    left: 0,
-  },
-});

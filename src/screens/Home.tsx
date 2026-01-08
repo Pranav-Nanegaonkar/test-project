@@ -4,6 +4,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import { SVGLogo } from '../components/svg/SVGComponent';
 import { AppText } from '../components/ui/AppText';
 import { Fonts } from '../constants/fonts';
+import CustomHeader from '../components/CustomHeader';
 
 export default function Home() {
   const [image, setImage] = useState<any>(null);
@@ -63,12 +64,15 @@ export default function Home() {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <AppText style={styles.text}>Home Page</AppText>
-      <View style={{ marginVertical: 10 }}>
-        <SVGLogo width={200} height={200} />
+    <>
+      <CustomHeader title="Home" />
+      <View style={styles.container}>
+        <AppText style={styles.text}>Home Page</AppText>
+        <View style={{ marginVertical: 10 }}>
+          <SVGLogo width={200} height={200} />
+        </View>
       </View>
-    </View>
+    </>
   );
 }
 
