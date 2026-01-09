@@ -1,21 +1,41 @@
 import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import MovieHome from '../screens/Movies/MovieHome';
+import Search from '../screens/Movies/Search';
+import Save from '../screens/Movies/Save';
+import Profile from '../screens/Movies/Profile';
+import { images } from '../constants/images';
+import { icons } from '../constants/icons';
 
 type BottomTabProps = {
-  Home: undefined;
+  MovieHome: undefined;
+  Search: undefined;
+  Save: undefined;
   Profile: undefined;
-  Menu: undefined;
 };
 
-const BottomTabs = createBottomTabNavigator();
+function TabIcon({ focused, icon, title }: any) {
+  if (focused) {
+    return (
+      <ImageBackground
+        source={images.highlight}
+        className="flex flex-row w-full flex-1 min-w-[112px] min-h-14 mt-4 justify-center items-center rounded-full overflow-hidden"
+      >
+        <Image source={icon} tintColor="#151312" className="size-5" />
+        <Text className="text-secondary text-base font-semibold ml-2">
+          {title}
+        </Text>
+      </ImageBackground>
+    );
+  }
 
-  // return (
-  //   <View className="size-full justify-center items-center mt-4 rounded-full">
-  //     <Image source={icon} tintColor="#A8B5DB" className="size-5" />
-  //   </View>
-  // );
-
+  return (
+    <View className="size-full justify-center items-center mt-4 rounded-full">
+      <Image source={icon} tintColor="#A8B5DB" className="size-5" />
+    </View>
+  );
+}
 
 const Tab = createBottomTabNavigator<BottomTabProps>();
 export default function MovieTabNavigator() {
