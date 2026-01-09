@@ -10,6 +10,7 @@ import Profile from '../screens/Profile';
 import { useAuth } from '../context/AuthContext';
 
 import DrawerNavigator from './DrawerNavigator';
+import DetailsScreen from '../screens/Movies/DetailsScreen';
 
 export type RootStackParamsList = {
   DrawerNavigator: undefined;
@@ -37,6 +38,7 @@ const RootNavigator = () => {
         <>
           <Stack.Screen name="DrawerNavigator" component={DrawerNavigator} />
           <Stack.Screen name="Profile" component={Profile} />
+          <Stack.Screen name="Details" component={DetailsScreen} />
         </>
       ) : (
         <>
