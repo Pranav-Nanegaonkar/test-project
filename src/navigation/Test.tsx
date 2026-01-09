@@ -8,12 +8,12 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomHeader from '../components/CustomHeader';
 
 /* ================= TMDB CONFIG ================= */
 
-const TMDB_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwYzJjMzY1MzM5YTUxYjM5MmRkZGFjNzk4MGY4MDBlNCIsIm5iZiI6MTc2NzMzNjI0NC44ODEsInN1YiI6IjY5NTc2OTM0OWMyZjg0OGYzOWQ3YWU4OSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.klw0p79R6IhYywoBxkbnn9XgftnsPgLYSDrhMgAxMR0";
+const TMDB_TOKEN =
+  'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwYzJjMzY1MzM5YTUxYjM5MmRkZGFjNzk4MGY4MDBlNCIsIm5iZiI6MTc2NzMzNjI0NC44ODEsInN1YiI6IjY5NTc2OTM0OWMyZjg0OGYzOWQ3YWU4OSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.klw0p79R6IhYywoBxkbnn9XgftnsPgLYSDrhMgAxMR0';
 console.log(Config.TMDB_APIKEY);
 
 const TMDB_CONFIG = {
@@ -36,30 +36,33 @@ type Movie = {
 
 /* ================= MOVIE CARD ================= */
 
-const MovieCard = React.memo(
-  ({ poster_path, title, vote_average, release_date }: Movie) => {
-    const imageUrl = poster_path
-      ? `https://image.tmdb.org/t/p/w500${poster_path}`
-      : 'https://placehold.co/600x400/1a1a1a/FFFFFF.png';
+const MovieCard = ({
+  poster_path,
+  title,
+  vote_average,
+  release_date,
+}: Movie) => {
+  const imageUrl = poster_path
+    ? `https://image.tmdb.org/t/p/w500${poster_path}`
+    : 'https://placehold.co/600x400/1a1a1a/FFFFFF.png';
 
-    return (
-      <TouchableOpacity style={styles.card}>
-        <Image source={{ uri: imageUrl }} style={styles.image} />
+  return (
+    <TouchableOpacity style={styles.card}>
+      <Image source={{ uri: imageUrl }} style={styles.image} />
 
-        <Text style={styles.title} numberOfLines={1}>
-          {title}
-        </Text>
+      <Text style={styles.title} numberOfLines={1}>
+        {title}
+      </Text>
 
-        <Text style={styles.rating}>⭐ {Math.round(vote_average / 2)}</Text>
+      <Text style={styles.rating}>⭐ {Math.round(vote_average / 2)}</Text>
 
-        <View style={styles.metaRow}>
-          <Text style={styles.metaText}>{release_date?.split('-')[0]}</Text>
-          <Text style={styles.metaText}>MOVIE</Text>
-        </View>
-      </TouchableOpacity>
-    );
-  },
-);
+      <View style={styles.metaRow}>
+        <Text style={styles.metaText}>{release_date?.split('-')[0]}</Text>
+        <Text style={styles.metaText}>MOVIE</Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
 
 /* ================= SCREEN ================= */
 
@@ -98,19 +101,16 @@ export default function Test() {
 
   if (error) {
     return (
-      <SafeAreaView style={styles.center}>
+      <View style={styles.center}>
         <Text style={{ color: 'red' }}>{error}</Text>
-      </SafeAreaView>
+      </View>
     );
   }
 
-  const renderItem = useCallback(
-    ({ item }: { item: Movie }) => <MovieCard {...item} />,
-    [],
-  );
+  const renderItem = ({ item }: { item: Movie }) => <MovieCard {...item} />;
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.safeArea}>
       <CustomHeader title="Test" />
 
       <FlatList
@@ -128,7 +128,7 @@ export default function Test() {
         removeClippedSubviews
         showsVerticalScrollIndicator={false}
       />
-    </SafeAreaView>
+    </View>
   );
 }
 

@@ -2,6 +2,7 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -15,7 +16,8 @@ import { icons } from '../../constants/icons';
 
 import MovieCard from '../../components/MovieCard';
 import SearchBar from '../../components/SearchBar';
-import { useNavigation } from '@react-navigation/native';
+import { DrawerActions, useNavigation } from '@react-navigation/native';
+import Icon from '../../utils/Icon';
 
 // export default function MovieHome() {
 //   return (
@@ -28,14 +30,6 @@ import { useNavigation } from '@react-navigation/native';
 // }
 
 export default function MovieHome() {
-  // const router = useRouter();
-
-  // const {
-  //   data: trendingMovies,
-  //   loading: trendingLoading,
-  //   error: trendingError,
-  // } = useFetch(getTrendingMovies);
-
   const {
     data: movies,
     loading: moviesLoading,
@@ -43,8 +37,12 @@ export default function MovieHome() {
   } = useFetch(() => fetchMovies({ query: '' }));
 
   const navigation = useNavigation();
+  
   return (
     <View className="flex-1 bg-primary">
+      <Pressable className="mt-5 ml-5" onPress={() => console.log('checking')}>
+        <Icon type="AntDesign" name="menu-fold" size={24} color={'white'} />
+      </Pressable>
       <Image
         source={images.bg}
         className="absolute w-full z-0"

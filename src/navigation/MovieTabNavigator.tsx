@@ -1,12 +1,10 @@
 import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import CustomHeader from '../components/CustomHeader';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MovieHome from '../screens/Movies/MovieHome';
 import Search from '../screens/Movies/Search';
 import Save from '../screens/Movies/Save';
 import Profile from '../screens/Movies/Profile';
-import Icon from '../utils/Icon';
 import { images } from '../constants/images';
 import { icons } from '../constants/icons';
 
