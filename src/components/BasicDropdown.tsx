@@ -12,6 +12,7 @@ const skills = [
   { label: 'React', value: 'react' },
   { label: 'Node', value: 'node' },
   { label: 'Python', value: 'python' },
+  { label: 'Angular', value: 'angular' },
 ];
 export default function BasicDropdown() {
   const [value, setValue] = useState<string | null>(null);
