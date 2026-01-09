@@ -6,6 +6,7 @@ import { images } from '../../constants/images';
 import MovieDisplayCard from '../../components/MovieCard';
 import { icons } from '../../constants/icons';
 import SearchBar from '../../components/SearchBar';
+import CustomHeaderForMovie from '../../components/CustomHeaderForMovie';
 const Search = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -46,15 +47,16 @@ const Search = () => {
         className="flex-1 absolute w-full z-0"
         resizeMode="cover"
       />
+      <CustomHeaderForMovie title="MovieHeader" />
 
       <FlatList
         className="px-5"
         data={movies as Movie[]}
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => <MovieDisplayCard {...item} />}
-        numColumns={3}
+        numColumns={2}
         columnWrapperStyle={{
-          justifyContent: 'flex-start',
+          justifyContent: 'space-around',
           gap: 16,
           marginVertical: 16,
         }}

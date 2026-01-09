@@ -7,7 +7,7 @@ export default function CustomHeaderForMovie({ title }: { title: string }) {
   const navigation = useNavigation();
 
   return (
-    <View style={[styles.header, title === 'MovieHeader' && styles.black]}>
+    <View style={[styles.header]}>
       {/* Drawer Menu Icon */}
       <Pressable
         onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
@@ -26,14 +26,15 @@ export default function CustomHeaderForMovie({ title }: { title: string }) {
 }
 
 const styles = StyleSheet.create({
-  black: {
-    backgroundColor: 'black',
-  },
   header: {
+    width: '100%',
     height: 56,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
+    // position: 'absolute',
+    zIndex: 1,
+    // backgroundColor: 'transparent',
   },
   title: {
     marginLeft: 16,

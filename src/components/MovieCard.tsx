@@ -13,7 +13,7 @@ const MovieCard = ({
   return (
     // <Link href={`/movie/${id}`} asChild>
     <TouchableOpacity
-      className="w-[30%]"
+      className="w-[45%]"
       // @ts-ignore
       onPress={() => navigation.navigate('Details' as never, { id: id })}
     >
@@ -23,7 +23,7 @@ const MovieCard = ({
             ? `https://image.tmdb.org/t/p/w500${poster_path}`
             : 'https://placehold.co/600x400/1a1a1a/FFFFFF.png',
         }}
-        className="w-full h-52 rounded-lg"
+        className="w-full h-72 rounded-lg"
         resizeMode="cover"
       />
 

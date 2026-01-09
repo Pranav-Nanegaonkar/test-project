@@ -6,6 +6,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React from 'react';
@@ -18,6 +19,7 @@ import MovieCard from '../../components/MovieCard';
 import SearchBar from '../../components/SearchBar';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import Icon from '../../utils/Icon';
+import CustomHeaderForMovie from '../../components/CustomHeaderForMovie';
 
 // export default function MovieHome() {
 //   return (
@@ -37,17 +39,15 @@ export default function MovieHome() {
   } = useFetch(() => fetchMovies({ query: '' }));
 
   const navigation = useNavigation();
-  
+
   return (
     <View className="flex-1 bg-primary">
-      <Pressable className="mt-5 ml-5" onPress={() => console.log('checking')}>
-        <Icon type="AntDesign" name="menu-fold" size={24} color={'white'} />
-      </Pressable>
       <Image
         source={images.bg}
         className="absolute w-full z-0"
         resizeMode="cover"
       />
+      <CustomHeaderForMovie title="MovieHeader" />
 
       <ScrollView
         className="flex-1 px-5"
@@ -101,14 +101,15 @@ export default function MovieHome() {
               </Text>
 
               <FlatList
+       
                 data={movies}
                 renderItem={({ item }) => <MovieCard {...item} />}
                 keyExtractor={item => item.id.toString()}
-                numColumns={3}
+                numColumns={2}
                 columnWrapperStyle={{
-                  justifyContent: 'flex-start',
+                  justifyContent: "space-around",
                   gap: 20,
-                  paddingRight: 5,
+                  // paddingRight: 5,
                   marginBottom: 10,
                 }}
                 className="mt-2 pb-32"

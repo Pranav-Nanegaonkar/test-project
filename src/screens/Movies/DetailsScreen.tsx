@@ -39,24 +39,31 @@ const DetailsScreen = () => {
 
   if (loading) {
     return (
-      <View style={{ flex: 1, backgroundColor: '#000' }}>
-        <ActivityIndicator size="large" />
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: '#000',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <ActivityIndicator size="large" color="#c5b1fd"/>
       </View>
     );
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#000' }}>
-      <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
+    <View style={{ flex: 1, backgroundColor: '#0e0c2f' }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: 100, padding: 20 }}>
         <Image
           source={{
             uri: `https://image.tmdb.org/t/p/w500${movie?.poster_path}`,
           }}
-          style={{ width: '100%', height: 550 }}
+          style={{ width: '100%', height: 550, borderRadius: 20 }}
           resizeMode="stretch"
         />
 
-        <View style={{ padding: 20 }}>
+        <View style={{ paddingHorizontal: 10, paddingTop: 20 }}>
           <Text style={{ color: '#fff', fontSize: 22, fontWeight: 'bold' }}>
             {movie?.title}
           </Text>
@@ -79,14 +86,16 @@ const DetailsScreen = () => {
           bottom: 20,
           left: 20,
           right: 20,
-          backgroundColor: '#FF6F00',
-          padding: 14,
+          backgroundColor: '#b396ff',
+          padding: 12,
           borderRadius: 10,
           alignItems: 'center',
         }}
         onPress={() => navigation.goBack()}
       >
-        <Text style={{ color: '#fff', fontWeight: '600' }}>Go Back</Text>
+        <Text style={{ color: '#000000', fontWeight: '700', fontSize: 15 }}>
+          Go Back
+        </Text>
       </TouchableOpacity>
     </View>
   );
