@@ -14,7 +14,7 @@ import CustomHeader from '../components/CustomHeader';
 
 const TMDB_TOKEN =
   'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwYzJjMzY1MzM5YTUxYjM5MmRkZGFjNzk4MGY4MDBlNCIsIm5iZiI6MTc2NzMzNjI0NC44ODEsInN1YiI6IjY5NTc2OTM0OWMyZjg0OGYzOWQ3YWU4OSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.klw0p79R6IhYywoBxkbnn9XgftnsPgLYSDrhMgAxMR0';
-console.log(Config.TMDB_APIKEY);
+// console.log(Config.TMDB_APIKEY);
 
 const TMDB_CONFIG = {
   BASE_URL: 'https://api.themoviedb.org/3',

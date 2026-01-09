@@ -9,6 +9,7 @@ import VectorIconDemo from '../screens/VectorIconDemo';
 import Icon from '../utils/Icon';
 import Test from './Test';
 import MovieTabNavigator from './MovieTabNavigator';
+import ReduxDemo from '../screens/ReduxDemo';
 
 const Drawer = createDrawerNavigator();
 
@@ -30,6 +31,7 @@ export default function DrawerNavigator() {
       <Drawer.Screen name="VectorIconDemo" component={VectorIconDemo} />
       <Drawer.Screen name="Test" component={Test} />
       <Drawer.Screen name="MovieTabNavigator" component={MovieTabNavigator} />
+      <Drawer.Screen name="ReactReduxDemo" component={ReduxDemo} />
     </Drawer.Navigator>
   );
 }
