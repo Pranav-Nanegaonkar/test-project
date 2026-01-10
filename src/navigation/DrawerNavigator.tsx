@@ -10,6 +10,7 @@ import Icon from '../utils/Icon';
 import Test from './Test';
 import MovieTabNavigator from './MovieTabNavigator';
 import ReduxDemo from '../screens/ReduxDemo';
+import CameraScreen from '../screens/CameraScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -22,7 +23,7 @@ export default function DrawerNavigator() {
         headerShown: false,
       }}
       // remove this after done
-      initialRouteName="MovieTabNavigator"
+      initialRouteName="CameraVision"
     >
       <Drawer.Screen name="Menu" component={TabNavigator} />
       <Drawer.Screen name="ImagePickerDemo" component={ImagePickerDemo} />
@@ -32,6 +33,7 @@ export default function DrawerNavigator() {
       <Drawer.Screen name="Test" component={Test} />
       <Drawer.Screen name="MovieTabNavigator" component={MovieTabNavigator} />
       <Drawer.Screen name="ReactReduxDemo" component={ReduxDemo} />
+      <Drawer.Screen name="CameraScreen" component={CameraScreen} />
     </Drawer.Navigator>
   );
 }

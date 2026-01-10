@@ -4,5 +4,11 @@ const workletsPluginOptions = {
 
 module.exports = {
   presets: ['module:@react-native/babel-preset', 'nativewind/babel'],
-  plugins: [['react-native-worklets/plugin', workletsPluginOptions]],
+  plugins: [
+    [
+      'react-native-reanimated/plugin',
+      'react-native-worklets/plugin',
+      workletsPluginOptions,
+    ],
+  ],
 };
