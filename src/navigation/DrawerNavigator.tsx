@@ -11,6 +11,8 @@ import Test from './Test';
 import MovieTabNavigator from './MovieTabNavigator';
 import ReduxDemo from '../screens/ReduxDemo';
 import CameraVisionDemo from '../screens/CameraVisionDemo';
+import CameraVisionDemoCapturePhoto from '../screens/CameraVisionDemoCapturePhoto';
+import CameraVisionDemoZoom from '../screens/CameraVisionDemoZoom';
 
 const Drawer = createDrawerNavigator();
 
@@ -34,6 +36,14 @@ export default function DrawerNavigator() {
       <Drawer.Screen name="MovieTabNavigator" component={MovieTabNavigator} />
       <Drawer.Screen name="ReactReduxDemo" component={ReduxDemo} />
       <Drawer.Screen name="CameraVisionDemo" component={CameraVisionDemo} />
+      <Drawer.Screen
+        name="CameraVisionDemoCapturePhoto"
+        component={CameraVisionDemoCapturePhoto}
+      />
+      <Drawer.Screen
+        name="CameraVisionDemoZoom"
+        component={CameraVisionDemoZoom}
+      />
     </Drawer.Navigator>
   );
 }
