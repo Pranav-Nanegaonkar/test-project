@@ -13,8 +13,25 @@ import ReduxDemo from '../screens/ReduxDemo';
 import CameraVisionDemo from '../screens/CameraVisionDemo';
 import CameraVisionDemoCapturePhoto from '../screens/CameraVisionDemoCapturePhoto';
 import CameraVisionDemoZoom from '../screens/CameraVisionDemoZoom';
+import PreviewScreen from '../screens/PreviewScreen';
+import CameraStackNavigator from './CameraStackNavigator';
 
-const Drawer = createDrawerNavigator();
+export type DrawerNavigationList = {
+  Menu: undefined;
+  ImagePickerDemo: undefined;
+  DocumentPickerDemo: undefined;
+  DropDownDemo: undefined;
+  VectorIconDemo: undefined;
+  Test: undefined;
+  MovieTabNavigator: undefined;
+  ReactReduxDemo: undefined;
+  CameraVisionDemo: undefined;
+  CameraVisionDemoCapturePhoto: undefined;
+  CameraVisionDemoZoom: undefined;
+  PreviewScreen: undefined;
+};
+
+const Drawer = createDrawerNavigator<DrawerNavigationList>();
 
 export default function DrawerNavigator() {
   return (
@@ -25,7 +42,7 @@ export default function DrawerNavigator() {
         headerShown: false,
       }}
       // remove this after done
-      initialRouteName="CameraVisionDemo"
+      initialRouteName="CameraVisionDemoCapturePhoto"
     >
       <Drawer.Screen name="Menu" component={TabNavigator} />
       <Drawer.Screen name="ImagePickerDemo" component={ImagePickerDemo} />
@@ -38,12 +55,13 @@ export default function DrawerNavigator() {
       <Drawer.Screen name="CameraVisionDemo" component={CameraVisionDemo} />
       <Drawer.Screen
         name="CameraVisionDemoCapturePhoto"
-        component={CameraVisionDemoCapturePhoto}
+        component={CameraStackNavigator}
       />
       <Drawer.Screen
         name="CameraVisionDemoZoom"
         component={CameraVisionDemoZoom}
       />
+      <Drawer.Screen name="PreviewScreen" component={PreviewScreen} />
     </Drawer.Navigator>
   );
 }

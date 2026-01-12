@@ -2,11 +2,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from '../features/auth/authSlice';
 import usersReducer from '../features/test/testSlice';
-
+import cameraReducer from '../features/camera/cameraSlice';
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     users: usersReducer,
+    camera: cameraReducer,
   },
   devTools: __DEV__, // enabled only in dev
 });
